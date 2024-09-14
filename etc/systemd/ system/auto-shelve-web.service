@@ -1,0 +1,15 @@
+[Unit]
+Description=Uvic VM Auto Shelving Email-Web Interface
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/gunicorn -b :8000 -w 4 --chdir /opt/app.py --timeout 30 --keep-alive 5 -k gthread app:app
+WorkingDirectory=/opt/uvic
+User=root  #  There cound probably be hardened
+Group=root #  These could probably be hardened
+EnvironmentFile=/etc/uvic/exports
+PassEnvironment=LOG_PATH SECRET_KEY SQLALCHEMY_DATABASE_URI SQLALCHEMY_TRACK_MODIFICATIONS 
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
