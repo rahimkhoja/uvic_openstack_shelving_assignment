@@ -2,6 +2,7 @@ name: Run Auto-Shelve VM Wednesday Script
 #  For Detecting OpenStack VM's that need to be Shelved. Runs every Wednesday at 6:00 am
 #  Finds VM's that no longer meet the Shelving requirements and removes them from list
 #  Sends reminder emails to users who have VM's that are too be shelved.
+#  Uploads a copy of the script logs and backs up the SQLite DB.
 
 on:
   schedule:
