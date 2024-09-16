@@ -1,0 +1,11 @@
+Flask==2.1.2
+Flask-SQLAlchemy==2.5.1
+Flask-Mail==0.9.1
+openstacksdk==0.99.0              # OpenStack SDK for Python
+python-openstackclient==5.7.0     # For CLI interactions and scripting
+python-rt==1.0.12                 # Python wrapper for Request Tracker
+Werkzeug==2.2.0                   # For proxy fixes and more
+Jinja2==3.1.2                     # Templating engine for Flask
+pymysql==1.0.2
+gunicorn==20.1.0
+certbot==1.22.0
