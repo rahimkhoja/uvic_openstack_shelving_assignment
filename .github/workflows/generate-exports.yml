@@ -1,0 +1,37 @@
+name: Generate AutoShelving System Exports File
+
+on:
+  workflow_dispatch: # This allows the workflow to be triggered manually
+
+jobs:
+  generate-and-deploy:
+    runs-on: [self-hosted, linux] # Ensure this matches your runner's labels
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate /etc/uvic/exports file
+        run: |
+          # Prepare a temporary file
+          echo "LOG_PATH=${{ secrets.LOG_PATH }}" > exports.tmp
+          echo "SECRET_KEY='${{ secrets.SECRET_KEY }}'" >> exports.tmp
+          echo "SQLALCHEMY_DATABASE_URI='${{ secrets.SQLALCHEMY_DATABASE_URI }}'" >> exports.tmp
+          echo "SQLALCHEMY_TRACK_MODIFICATIONS=${{ secrets.SQLALCHEMY_TRACK_MODIFICATIONS }}" >> exports.tmp
+          echo "GOOGLE_ANALYTICS_ID='${{ secrets.GOOGLE_ANALYTICS_ID }}'" >> exports.tmp
+          echo "GOOGLE_SITE_VERIFICATION=${{ secrets.GOOGLE_SITE_VERIFICATION }}" >> exports.tmp
+          echo "BING_SITE_VERIFICATION='${{ secrets.BING_SITE_VERIFICATION }}'" >> exports.tmp
+          echo "SYSTEM_MAINTENANCE_MODE=${{ secrets.SYSTEM_MAINTENANCE_MODE }}" >> exports.tmp
+          echo "EMAIL_SERVER='${{ secrets.EMAIL_SERVER }}'" >> exports.tmp
+          echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> exports.tmp
+          echo "EMAIL_USE_TLS=${{ secrets.EMAIL_USE_TLS }}" >> exports.tmp
+          echo "RT_USERNAME='${{ secrets.RT_USERNAME }}'" >> exports.tmp
+          echo "RT_PASSWORD='${{ secrets.RT_PASSWORD }}'" >> exports.tmp
+          echo "RT_QUEUE='${{ secrets.RT_QUEUE }}'" >> exports.tmp
+
+      - name: Backup original file
+        run: |
+          sudo mv /etc/uvic/exports /etc/uvic/exports_$(date +%F).bak
+
+      - name: Move new configuration into place
+        run: |
+          sudo mv exports.tmp /etc/uvic/exports
