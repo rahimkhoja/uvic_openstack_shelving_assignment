@@ -10,6 +10,7 @@ This repository contains the code and documentation for the UVic OpenStack VM Sh
 - Email notifications to VM owners with options for deferral.
 - Integration with GitHub Actions for scheduled task execution.
 - Flask-based web server secured with Shibboleth authentication for user interactions.
-- Comprehensive logging and audit trails via a SQLite database.
+- Integration with Request Tracket for automatic Ticket creation.
+- Auditing via complex ticketing and detailed Log commiting.
 
 For detailed system operations and setup, refer to the DOCS.md file.
