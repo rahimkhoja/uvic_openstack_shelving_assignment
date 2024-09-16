@@ -41,7 +41,28 @@ jobs:
 
       - name: Commit Logs
         run: |
+          mkdir -p logs
           git add ./logs/*
           git commit -m "Update logs"
           # Use the PAT instead of the automatic GITHUB_TOKEN
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
+
+      - name: Copy and Rename SQLite Database for Backup
+        run: |
+          mkdir -p backup
+          # Extract the filename from the path
+          filename=$(basename ${{ secrets.SQLITE_DB_PATH }})
+          # Get the extension of the file
+          extension="${filename##*.}"
+          # Get the filename without the extension
+          base="${filename%.*}"
+          # Construct the new filename with the date
+          new_filename="${base}-$(date +%d-%m-%Y).${extension}"
+          # Copy the file with the new name to the backup directory
+          cp ${{ secrets.SQLITE_DB_PATH }} "backup/${new_filename}"
+
+      - name: Commit Database Backup
+        run: |
+          git add ./backup/*
+          git commit -m "Backup database on $(date +%d-%m-%Y)"
           git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
