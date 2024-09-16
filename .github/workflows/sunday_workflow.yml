@@ -27,6 +27,7 @@ jobs:
       - name: Run Sunday Shelving Process Python Script
         run: python /opt/uvic/shelving_scripts/sunday_shelve.py
         continue-on-error: false
+        working-directory: ${{ github.workspace }}
         env:
           OPENSTACK_USERNAME: ${{ secrets.OPENSTACK_USERNAME }}
           OPENSTACK_PASSWORD: ${{ secrets.OPENSTACK_PASSWORD }}
