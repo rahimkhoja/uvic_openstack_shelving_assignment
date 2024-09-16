@@ -12,7 +12,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_sqlalchemy import SQLAlchemy
 from regex import regex
 
-
 # Local application/library specific imports
-from models import db, User, Subscription, MobileNumber, History, UserPreference, AssistantPreference 
+from models import db, VMShelving 
 
