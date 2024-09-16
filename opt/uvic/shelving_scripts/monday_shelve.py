@@ -1,7 +1,7 @@
-import sqlite3
-from openstack import connection
-import logging
 import os
+import sqlite3
+import logging
+from openstack import connection
 from datetime import datetime
 
 # Environment variables
