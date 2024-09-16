@@ -4,6 +4,45 @@ import logging
 from openstack import connection
 from datetime import datetime
 
+def load_database(db_path):
+    """ Load and return the database connection. """
+    try:
+        conn = sqlite3.connect(db_path)
+        logger.info("Database connected successfully.")
+        return conn
+    except sqlite3.Error as e:
+        logger.error(f"Failed to connect to the database: {e}")
+        return None
+
+def get_shelving_records(conn, vm_name=None, email=None, shelve_date=None):
+    """
+    Retrieve records from the shelving table.
+    Filter by VM_Name, Email, and Shelve_Date if provided.
+    """
+    try:
+        cursor = conn.cursor()
+        query = "SELECT * FROM shelving WHERE 1=1"
+        params = []
+        
+        if vm_name:
+            query += " AND VM_Name = ?"
+            params.append(vm_name)
+        if email:
+            query += " AND Email = ?"
+            params.append(email)
+        if shelve_date:
+            query += " AND Shelve_Date = ?"
+            params.append(shelve_date)
+        
+        cursor.execute(query, params)
+        records = cursor.fetchall()
+        logger.info(f"Retrieved {len(records)} records from the database.")
+        return records
+    except sqlite3.Error as e:
+        logger.error(f"Error retrieving records: {e}")
+        return []
+
+
 # Environment variables
 openstack_username = os.getenv('OPENSTACK_USERNAME')
 openstack_password = os.getenv('OPENSTACK_PASSWORD')
