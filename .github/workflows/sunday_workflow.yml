@@ -1,0 +1,46 @@
+name: Run Auto-Shelve VM Sunday Script
+#  For Detecting OpenStack VM's that need to be Shelved Every Sunday at 6:00 am
+
+on:
+  schedule:
+    # Runs at 6 AM every Sunday
+    - cron: '0 6 * * 0'
+
+jobs:
+  run_script_and_push_logs:
+    runs-on: self-hosted # Ensure you have a self-hosted runner setup
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10' # Set the Python version you need
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt # Assuming you have a requirements.txt
+
+      - name: Run Python Script
+        run: python your_script.py
+        env:
+          OPENSTACK_USERNAME: ${{ secrets.OPENSTACK_USERNAME }}
+          OPENSTACK_PASSWORD: ${{ secrets.OPENSTACK_PASSWORD }}
+          OPENSTACK_DOMAIN: ${{ secrets.OPENSTACK_DOMAIN }}
+          RESEARCH_IT_EMAIL: ${{ secrets.RESEARCH_IT_EMAIL }}
+          SQLITE_DB_PATH: ${{ secrets.SQLITE_DB_PATH }}
+          SQLITE_USER: ${{ secrets.SQLITE_USER }}
+          SQLITE_PASSWORD: ${{ secrets.SQLITE_PASSWORD }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+
+      - name: Commit Logs
+        run: |
+          git add ./logs/*
+          git commit -m "Update logs"
+          # Use the PAT instead of the automatic GITHUB_TOKEN
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
+
