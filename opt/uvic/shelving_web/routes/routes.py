@@ -46,8 +46,47 @@ def configure_routes(app):
         menu = generate_menu(member)
         return render_template('terms.html', seometa=MetaTags, menu=menu)
 
+    @app.route('/email/notification-deferral', methods=['POST'])
+    def notification_deferral():
+        data = request.json
+        email_content = "Your shelving has been deferred to {date}".format(date=data['deferral_date'])
+        if send_email_and_post_comment(data['email'], data['vmname'], data['deferral_date'], data['ticket_number'], email_content):
+            return jsonify({'message': 'Deferral notification sent successfully'}), 200
+
+    @app.route('/email/notification-no-deferral', methods=['POST'])
+    def notification_no_deferral():
+        data = request.json
+        email_content = "No deferral was initiated for {vmname}".format(vmname=data['vmname'])
+        if send_email_and_post_comment(data['email'], data['vmname'], data['deferral_date'], data['ticket_number'], email_content):
+            return jsonify({'message': 'No-deferral notification sent successfully'}), 200
+
+    @app.route('/email/cancel-shelving', methods=['POST'])
+    def cancel_shelving():
+        data = request.json
+        email_content = "Shelving for {vmname} has been canceled".format(vmname=data['vmname'])
+        if send_email_and_post_comment(data['email'], data['vmname'], data['deferral_date'], data['ticket_number'], email_content):
+            # Close the ticket (dummy implementation)
+            print(f"Ticket {data['ticket_number']} closed.")
+            return jsonify({'message': 'Shelving cancellation notification sent successfully'}), 200
+
+    @app.route('/email/complete-shelving', methods=['POST'])
+    def complete_shelving():
+        data = request.json
+        email_content = "Shelving for {vmname} is now complete".format(vmname=data['vmname'])
+        if send_email_and_post_comment(data['email'], data['vmname'], data['deferral_date'], data['ticket_number'], email_content):
+            # Close the ticket (dummy implementation)
+            print(f"Ticket {data['ticket_number']} closed.")
+            return jsonify({'message': 'Shelving complete notification sent successfully'}), 200
+
+    @app.route('/email/shelving-initiated', methods=['POST'])
+    def shelving_initiated():
+        data = request.json
+        email_content = "Shelving for {vmname} has been initiated".format(vmname=data['vmname'])
+        if send_email_and_post_comment(data['email'], data['vmname'], data['deferral_date'], data['ticket_number'], email_content):
+            # Provide a new ticket number (dummy implementation)
+            new_ticket_number = "12345"
+            return jsonify({'message': 'Shelving initiated', 'ticket_number': new_ticket_number}), 200
     
     @sitemap.register_generator
     def index():
         yield 'index_page', {}
-
