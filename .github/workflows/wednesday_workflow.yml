@@ -1,10 +1,12 @@
-name: Run Auto-Shelve VM Sunday Script
-#  For Detecting OpenStack VM's that need to be Shelved Every Wednesday at 6:00 am
+name: Run Auto-Shelve VM Wednesday Script
+#  For Detecting OpenStack VM's that need to be Shelved. Runs every Wednesday at 6:00 am
+#  Finds VM's that no longer meet the Shelving requirements and removes them from list
+#  Sends reminder emails to users who have VM's that are too be shelved.
 
 on:
   schedule:
-    # Runs at 6 AM every Sunday
-    - cron: '0 6 * * 0'
+    # Runs at 6 AM every Wednesday
+    - cron: '0 6 * * 3'
 
 jobs:
   run_script_and_push_logs:
