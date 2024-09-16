@@ -1,7 +1,8 @@
 name: Run Auto-Shelve VM Sunday Script
-#  For Detecting OpenStack VM's that need to be Shelved Every Sunday at 6:00 am
-#  Commit Logs from Script Run to Repo 
-#  Backup SQLite Database to repo
+#  For Detecting OpenStack VM's that need to be Shelved. Runs every Sunday at 6:00 am
+#  Finds VM's that meet the Shelving requirements and marks them for shelving.
+#  Sends emails to the VM Ownders notifing them of upcomming shelving. 
+#  Uploads a copy of the script logs and backs up the SQLite DB.
 
 on:
   schedule:
