@@ -26,6 +26,7 @@ jobs:
 
       - name: Run Sunday Shelving Process Python Script
         run: python /opt/uvic/shelving_scripts/sunday_shelve.py
+        continue-on-error: false
         env:
           OPENSTACK_USERNAME: ${{ secrets.OPENSTACK_USERNAME }}
           OPENSTACK_PASSWORD: ${{ secrets.OPENSTACK_PASSWORD }}
@@ -44,8 +45,7 @@ jobs:
         run: |
           mkdir -p logs
           git add ./logs/*
-          git commit -m "Update logs"
-          # Use the PAT instead of the automatic GITHUB_TOKEN
+          git diff --cached --exit-code || git commit -m "Update logs"
           git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
 
       - name: Copy and Rename SQLite Database for Backup
@@ -65,5 +65,5 @@ jobs:
       - name: Commit Database Backup
         run: |
           git add ./backup/*
-          git commit -m "Backup database on $(date +%d-%m-%Y)"
+          git diff --cached --exit-code || git commit -m "Backup database on $(date +%d-%m-%Y)"
           git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
