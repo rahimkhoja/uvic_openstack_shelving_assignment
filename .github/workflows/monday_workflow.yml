@@ -1,7 +1,7 @@
 name: Run Auto-Shelve VM Monday Script
 #  For Detecting OpenStack VM's that need to be Shelved. Runs every Monday at 6:00 am
 #  Finds VM's that no longer meet the Shelving requirements and removes them from list
-#  Shelves VM's that meet the shelving requirements. 
+#  Shelves VM's that meet the shelving requirements and sends Completion emails. 
 #  Uploads a copy of the script logs and backs up the SQLite DB.
 
 on:
@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt # Assuming you have a requirements.txt
 
-      - name: Run Python Script
-        run: python your_script.py
+      - name: Run Monday Shelving Process Python Script
+        run: python /opt/uvic/shelving_scripts/monday_shelve.py
         env:
           OPENSTACK_USERNAME: ${{ secrets.OPENSTACK_USERNAME }}
           OPENSTACK_PASSWORD: ${{ secrets.OPENSTACK_PASSWORD }}
