@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt # Assuming you have a requirements.txt
 
-      - name: Run Python Script
-        run: python your_script.py
+      - name: Run Wednesday Shelving Process Python Script
+        run: python /opt/uvic/shelving_scripts/wednesday_shelve.py
         env:
           OPENSTACK_USERNAME: ${{ secrets.OPENSTACK_USERNAME }}
           OPENSTACK_PASSWORD: ${{ secrets.OPENSTACK_PASSWORD }}
